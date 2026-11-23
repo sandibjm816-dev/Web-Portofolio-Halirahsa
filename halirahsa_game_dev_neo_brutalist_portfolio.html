@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HALIRAHSA // GAME DEV — Neo-Brutalist Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@600;700;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-white: #FFFFFF;
+      --ink-black: #050505;
+      --electric-blue: #0044FF;
+      --vermilion-red: #FF2E17;
+      --frame-gray: #E5E5E5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #DCDAD5;
+      background-image: radial-gradient(#A8A59E 1px, transparent 1px);
+      background-size: 20px 20px;
+      color: var(--ink-black);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .font-display {
+      font-family: 'Archivo Black', 'Inter', sans-serif;
+      letter-spacing: -0.04em;
+    }
+
+    .font-mono-brutal {
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* Brutalist Hard Shadows & Borders */
+    .brutal-border {
+      border: 3px solid var(--ink-black);
+    }
+
+    .brutal-border-thick {
+      border: 4px solid var(--ink-black);
+    }
+
+    .brutal-shadow {
+      box-shadow: 6px 6px 0px var(--ink-black);
+    }
+
+    .brutal-shadow-sm {
+      box-shadow: 4px 4px 0px var(--ink-black);
+    }
+
+    .brutal-btn {
+      transition: transform 0.12s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.12s cubic-bezier(0.2, 0, 0, 1);
+      cursor: pointer;
+    }
+
+    .brutal-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 7px 7px 0px var(--ink-black);
+    }
+
+    .brutal-btn:active {
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0px var(--ink-black);
+    }
+
+    /* Vertical Text Utility */
+    .writing-vertical-up {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+
+    /* Halftone Pattern for Brutalist Architecture Panel */
+    .halftone-concrete {
+      background-color: #D8D8D8;
+      background-image:
+        radial-gradient(#000 1.25px, transparent 1.25px),
+        radial-gradient(#000 1.25px, #D8D8D8 1.25px);
+      background-size: 8px 8px;
+      background-position: 0 0, 4px 4px;
+    }
+
+    /* Pixelated Rendering for Canvas/SVG */
+    .pixelated {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    /* Messy Mode Chaos Animation */
+    body.messy-mode .poster-module {
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    body.messy-mode .messy-tilt-1 { transform: rotate(-1.6deg) translate(-4px, 3px); }
+    body.messy-mode .messy-tilt-2 { transform: rotate(1.8deg) translate(5px, -4px); }
+    body.messy-mode .messy-tilt-3 { transform: rotate(-2.2deg) translate(3px, 5px); }
+    body.messy-mode .messy-tilt-4 { transform: rotate(1.3deg) translate(-3px, -3px); }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FFFFFF;
+      border-left: 3px solid #000000;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #000000;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #FF2E17;
+    }
+
+    /* Subtle Marquee */
+    @keyframes marqueeShift {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-marquee {
+      display: flex;
+      width: max-content;
+      animation: marqueeShift 18s linear infinite;
+    }
+    .animate-marquee:hover {
+      animation-play-state: paused;
+    }
+  </style>
+</head>
+<body class="min-h-screen py-3 px-2 sm:py-6 sm:px-6 lg:px-10 flex flex-col items-center justify-start">
+
+  <!-- OUTER MAC-BRUTALIST BROWSER FRAME (MATCHING MOCKUP) -->
+  <main id="browser-window" class="w-full max-w-[1140px] bg-white brutal-border-thick rounded-t-2xl rounded-b-md shadow-[12px_12px_0px_#050505] overflow-hidden relative">
+
+    <!-- Browser Window Top Bar -->
+    <header class="bg-[#E6E4DF] border-b-4 border-black px-3 sm:px-5 py-2.5 flex items-center justify-between gap-3 select-none">
+      <!-- Left Traffic Light Dots -->
+      <div class="flex items-center gap-2 shrink-0">
+        <button onclick="triggerToast('SYSTEM: CORE ENGINE LOCKED')" title="Close" class="w-4 h-4 rounded-full bg-[#FF2E17] border-2 border-black hover:scale-110 transition-transform"></button>
+        <button onclick="toggleMessyMode()" title="Toggle Messy Grid Mode" class="w-4 h-4 rounded-full bg-[#FFD600] border-2 border-black hover:scale-110 transition-transform"></button>
+        <button onclick="openModal('king-game')" title="Launch Playable King" class="w-4 h-4 rounded-full bg-[#00C853] border-2 border-black hover:scale-110 transition-transform"></button>
+      </div>
+
+      <!-- Center Pill Address / Command Bar -->
+      <div class="flex-1 max-w-xl mx-auto">
+        <div class="bg-white border-[2.5px] border-black rounded-full px-3 sm:px-4 py-1 flex items-center justify-between text-[11px] sm:text-xs font-mono-brutal font-bold tracking-tight">
+          <span class="truncate">https://halirahsa.gamedev // BUILD_v2.6</span>
+          <span class="hidden sm:inline-block bg-[#0044FF] text-white px-2 py-0.5 text-[10px] rounded-full ml-2">ONLINE</span>
+        </div>
+      </div>
+
+      <!-- Top Right Window [X] Box -->
+      <button onclick="resetPosterState()" title="Reset Layout" class="w-7 h-7 bg-white border-[2.5px] border-black flex items-center justify-center font-black text-sm hover:bg-[#FF2E17] hover:text-white transition-colors shrink-0">
+        ✕
+      </button>
+    </header>
+
+    <!-- POSTER CANVAS CONTAINER -->
+    <div class="p-3 sm:p-6 md:p-8 bg-white">
+
+      <!-- 1. TOP META BAR -->
+      <div class="grid grid-cols-12 items-start gap-2 sm:gap-4 mb-2 sm:mb-3 text-[10px] sm:text-xs font-extrabold uppercase tracking-tight leading-tight">
+        <!-- Left Micro Statement -->
+        <div class="col-span-4 sm:col-span-2">
+          <div>BUILD, BREAK.</div>
+          <div>REPEAT.</div>
+        </div>
+
+        <!-- Vermilion Red-Orange Accent Block -->
+        <div class="col-span-8 sm:col-span-4 h-7 sm:h-9 bg-[#FF2E17] border-2 border-black flex items-center px-2 overflow-hidden">
+          <span class="text-[9px] sm:text-[10px] font-mono-brutal text-black font-bold tracking-widest uppercase truncate">
+            RAW CODE // UNFILTERED MECHANICS
+          </span>
+        </div>
+
+        <!-- Center-Right Tagline -->
+        <div class="col-span-6 sm:col-span-3 sm:pl-2">
+          <div>A. STUDY IN</div>
+          <div>DISOBEDIENCE</div>
+        </div>
+
+        <!-- Slanted Parallelograms + Year MMXXVI -->
+        <div class="col-span-6 sm:col-span-3 flex items-center justify-between sm:justify-end gap-4">
+          <div class="flex items-center gap-1.5" aria-hidden="true">
+            <span class="w-3 sm:w-4 h-5 sm:h-6 bg-black -skew-x-[20deg] inline-block"></span>
+            <span class="w-3 sm:w-4 h-5 sm:h-6 bg-black -skew-x-[20deg] inline-block"></span>
+            <span class="w-3 sm:w-4 h-5 sm:h-6 bg-black -skew-x-[20deg] inline-block"></span>
+          </div>
+          <div class="font-black text-xs sm:text-sm tracking-wider">MMXXVI</div>
+        </div>
+      </div>
+
+      <!-- 2. MASSIVE HERO DISPLAY HEADER -->
+      <section class="mb-4 sm:mb-6 select-none">
+        <h1 class="font-display uppercase text-black leading-[0.86] tracking-[-0.045em]">
+          <span class="block text-[13.2vw] sm:text-[92px] md:text-[118px] lg:text-[138px]">
+            HALIRAHSA
+          </span>
+          <span class="flex items-center flex-wrap gap-x-2 sm:gap-x-4 text-[12.2vw] sm:text-[84px] md:text-[108px] lg:text-[126px] mt-1">
+            <!-- Dual-Color Slashes matching Mockup -->
+            <span class="inline-flex items-center gap-1.5 sm:gap-2.5 mr-1" aria-hidden="true">
+              <span class="w-3.5 sm:w-5 md:w-6 h-[10vw] sm:h-[68px] md:h-[88px] lg:h-[102px] bg-[#FF2E17] -skew-x-[22deg] inline-block border-2 border-black"></span>
+              <span class="w-3.5 sm:w-5 md:w-6 h-[10vw] sm:h-[68px] md:h-[88px] lg:h-[102px] bg-[#0044FF] -skew-x-[22deg] inline-block border-2 border-black"></span>
+            </span>
+            <span>GAME DEV</span>
+          </span>
+        </h1>
+      </section>
+
+      <!-- 3. MAIN ASYMMETRICAL BENTO POSTER GRID -->
+      <section class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 items-stretch">
+
+        <!-- LEFT COLUMN (Cols 1-5): ELECTRIC ROYAL BLUE HERO CARD + MOHAMED SALAH PIXEL ART -->
+        <div class="lg:col-span-5 flex flex-col gap-4">
+          <div id="hero-king-card" class="poster-module messy-tilt-1 relative bg-[#0044FF] brutal-border-thick min-h-[390px] sm:min-h-[450px] flex flex-col justify-between overflow-visible group">
+            <!-- Top-Right [X] Window Box -->
+            <button onclick="sparkleKing()" title="Trigger King Celebration" class="absolute top-3 right-3 z-20 w-7 h-7 bg-[#0044FF] border-2 border-black flex items-center justify-center text-black font-black text-xs hover:bg-white transition-colors">
+              ✕
+            </button>
+
+            <!-- Top-Left Live Status Tag -->
+            <div class="p-3 z-10 flex items-center gap-2">
+              <span class="inline-block w-2.5 h-2.5 bg-[#FF2E17] border border-black animate-ping"></span>
+              <span class="font-mono-brutal text-[10px] font-bold text-white uppercase tracking-wider bg-black px-2 py-0.5">
+                SPRITE_ID: #11_EGYPTIAN_KING
+              </span>
+            </div>
+
+            <!-- Overlapping Left White Pill/Box Badge: PLAYABLE KING -> -->
+            <button onclick="openModal('king-game')" class="brutal-btn absolute left-[-10px] sm:left-[-14px] top-[46%] -translate-y-1/2 z-30 bg-white brutal-border px-3.5 py-2.5 sm:px-4 sm:py-3 flex items-center gap-3 text-left shadow-[5px_5px_0px_#050505]">
+              <div class="font-black text-xs sm:text-sm leading-[1.05] uppercase text-black">
+                <div>PLAYABLE</div>
+                <div>KING</div>
+              </div>
+              <span class="text-xl sm:text-2xl font-black text-black leading-none">➔</span>
+            </button>
+
+            <!-- High-Detail 2D Pixel Art Mohamed Salah Canvas -->
+            <div class="relative w-full flex-1 flex items-end justify-center pt-2 px-4 overflow-hidden cursor-pointer" onclick="openModal('king-game')">
+              <canvas id="salah-pixel-canvas" width="96" height="108" class="pixelated w-[270px] sm:w-[320px] h-auto block select-none transition-transform duration-200 group-hover:scale-[1.03]"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- CENTER COLUMN (Cols 6-8): GIANT ARROW + MICRO-COPY + "GOOD GAMES CAN BE MESSY" -->
+        <div class="lg:col-span-3 flex flex-col justify-between gap-4">
+          <!-- Upper Arrow & Vertical Stack -->
+          <div class="poster-module messy-tilt-2 flex flex-row lg:flex-col items-center lg:items-start justify-between gap-3 pt-1">
+            <!-- Huge Bold Right-Pointing Black Arrow -->
+            <div class="w-28 sm:w-36 lg:w-full flex items-center justify-center lg:justify-start">
+              <svg viewBox="0 0 160 130" class="w-28 sm:w-36 lg:w-44 h-auto fill-black">
+                <path d="M0 44 H92 L58 10 L78 0 L152 65 L78 130 L58 120 L92 86 H0 Z" />
+              </svg>
+            </div>
+
+            <!-- Vertical Micro-Copy Stack -->
+            <div class="font-extrabold text-[11px] sm:text-xs uppercase leading-[1.28] tracking-tight text-black">
+              <div>IDEAS</div>
+              <div>MODULES</div>
+              <div>MISTAKES</div>
+              <div>ITERATION</div>
+              <div>BETTER DESIGN</div>
+            </div>
+          </div>
+
+          <!-- Electric Blue Banner Block: GOOD GAMES CAN BE MESSY -->
+          <div id="messy-banner" class="poster-module messy-tilt-3 relative bg-[#0044FF] brutal-border-thick brutal-shadow p-4 sm:p-5 lg:-ml-8 lg:mr-[-16px] z-20">
+            <button onclick="toggleMessyMode()" title="Toggle Messy Layout Mode" class="absolute top-2.5 right-2.5 w-6 h-6 bg-[#0044FF] border-2 border-black flex items-center justify-center text-black font-black text-xs hover:bg-[#FF2E17] hover:text-white transition-colors">
+              ✕
+            </button>
+            <div class="font-display uppercase text-black text-2xl sm:text-3xl lg:text-[31px] leading-[1.02] pr-6">
+              GOOD GAMES<br />CAN BE MESSY
+            </div>
+            <div class="mt-3 flex items-center justify-between border-t-2 border-black pt-2">
+              <span class="font-mono-brutal text-[10px] font-bold text-white uppercase">
+                [CLICK TO SHAKE GRID]
+              </span>
+              <button onclick="toggleMessyMode()" class="bg-black text-white text-[10px] font-mono-brutal font-bold px-2 py-0.5 hover:bg-white hover:text-black border border-black transition-colors">
+                CHAOS: <span id="chaos-status">OFF</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN (Cols 9-12): RED-ORANGE DESIGN SYSTEM CARD + FAR-RIGHT SIDEBAR STRIP -->
+        <div class="lg:col-span-4 grid grid-cols-12 gap-3">
+          <!-- Red-Orange Card (#FF2E17) -->
+          <div onclick="openModal('design-system')" class="poster-module messy-tilt-4 brutal-btn col-span-8 sm:col-span-8 bg-[#FF2E17] brutal-border-thick p-3.5 sm:p-4 flex flex-col justify-between">
+            <!-- Wireframe 3D Perspective Tunnel/Grid SVG Graphic -->
+            <div class="w-full border-2 border-black bg-[#FF2E17] p-1.5 mb-3">
+              <svg viewBox="0 0 220 145" class="w-full h-auto stroke-black fill-none" stroke-width="1.6">
+                <!-- Outer frame -->
+                <rect x="2" y="2" width="216" height="141" />
+                <!-- Inner perspective rectangles -->
+                <rect x="26" y="18" width="168" height="109" />
+                <rect x="50" y="34" width="120" height="77" />
+                <rect x="74" y="50" width="72" height="45" />
+                <rect x="92" y="62" width="36" height="21" />
+                <!-- Radial perspective lines -->
+                <line x1="2" y1="2" x2="92" y2="62" />
+                <line x1="218" y1="2" x2="128" y2="62" />
+                <line x1="2" y1="143" x2="92" y2="83" />
+                <line x1="218" y1="143" x2="128" y2="83" />
+                <line x1="110" y1="2" x2="110" y2="62" />
+                <line x1="110" y1="143" x2="110" y2="83" />
+                <line x1="2" y1="72.5" x2="92" y2="72.5" />
+                <line x1="218" y1="72.5" x2="128" y2="72.5" />
+                <!-- Floating warped wireframe terrain mesh in center -->
+                <path d="M84 72 Q98 58 110 70 T136 66 L130 82 Q114 88 102 78 T84 72 Z" fill="#FF2E17" stroke="#000" stroke-width="1.8" />
+                <path d="M90 72 L132 72 M100 64 L106 81 M116 64 L120 82" stroke="#000" stroke-width="1.2" />
+              </svg>
+            </div>
+
+            <!-- Bold Black Text -->
+            <div>
+              <div class="font-black text-xl sm:text-2xl leading-[1.02] uppercase text-black tracking-tight">
+                DESIGN<br />SYSTEM //
+              </div>
+              <div class="mt-2 font-extrabold text-sm sm:text-base leading-[1.08] uppercase text-black">
+                GAMEPLAY<br />MECHANICS
+              </div>
+              <div class="mt-3 inline-block bg-black text-white font-mono-brutal text-[10px] font-bold px-2 py-1 uppercase">
+                INSPECT ARCHITECTURE ↗
+              </div>
+            </div>
+          </div>
+
+          <!-- Far-Right Sidebar Strip -->
+          <div class="col-span-4 sm:col-span-4 flex flex-col justify-between items-center border-2 border-black p-2.5 bg-white">
+            <div class="w-full font-extrabold text-[10px] sm:text-[11px] uppercase leading-[1.25] text-left">
+              <div>TYPE</div>
+              <div>SHAPE</div>
+              <div>COLOR</div>
+              <div>LAYOUT</div>
+              <div>REPEAT</div>
+            </div>
+
+            <!-- Two Black-and-Red Wireframe Globe Icons -->
+            <div class="flex flex-col items-center gap-3 my-3">
+              <!-- Small Globe -->
+              <svg viewBox="0 0 64 64" class="w-11 h-11 sm:w-12 sm:h-12">
+                <circle cx="32" cy="32" r="28" fill="#FF2E17" stroke="#000" stroke-width="3" />
+                <ellipse cx="32" cy="32" rx="14" ry="28" fill="none" stroke="#000" stroke-width="2.5" />
+                <line x1="4" y1="32" x2="60" y2="32" stroke="#000" stroke-width="2.5" />
+                <path d="M9 18 Q32 24 55 18" fill="none" stroke="#000" stroke-width="2.5" />
+                <path d="M9 46 Q32 40 55 46" fill="none" stroke="#000" stroke-width="2.5" />
+              </svg>
+
+              <!-- Larger Globe -->
+              <svg viewBox="0 0 64 64" class="w-14 h-14 sm:w-16 sm:h-16">
+                <circle cx="32" cy="32" r="29" fill="#FF2E17" stroke="#000" stroke-width="3" />
+                <ellipse cx="32" cy="32" rx="15" ry="29" fill="none" stroke="#000" stroke-width="2.5" />
+                <line x1="32" y1="3" x2="32" y2="61" stroke="#000" stroke-width="2.5" />
+                <line x1="3" y1="32" x2="61" y2="32" stroke="#000" stroke-width="2.5" />
+                <path d="M8 17 Q32 23 56 17" fill="none" stroke="#000" stroke-width="2.5" />
+                <path d="M8 47 Q32 41 56 47" fill="none" stroke="#000" stroke-width="2.5" />
+              </svg>
+            </div>
+
+            <!-- Rotated Red-Orange Ticket/Cartridge Badge -->
+            <button onclick="openModal('dev-logs')" title="Open Dev Logs" class="brutal-btn bg-[#FF2E17] border-2 border-black p-1.5 rounded rotate-[10deg] shadow-[3px_3px_0px_#000]">
+              <div class="border border-black px-2 py-1 text-[9px] font-mono-brutal font-bold text-black leading-none">
+                LOG<br />#09
+              </div>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. BOTTOM SECTION: GRID BREAK + CYBER PUNKED + FORM FOLLOWS FANTASY + BRUTALIST ARCHITECTURE -->
+      <section class="mt-4 sm:mt-5 grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 items-stretch">
+
+        <!-- BOTTOM-LEFT STACK (Cols 1-5) -->
+        <div class="lg:col-span-5 flex flex-col gap-4 relative">
+          <!-- Black Block: GRID BREAK -->
+          <div class="poster-module messy-tilt-2 relative bg-black text-white brutal-border-thick p-4 sm:p-5 flex items-center justify-between gap-3">
+            <div>
+              <div class="font-display text-2xl sm:text-3xl leading-[0.98] uppercase tracking-tight">
+                GRID<br />BREAK
+              </div>
+            </div>
+
+            <div class="font-mono-brutal text-[10px] sm:text-[11px] font-bold uppercase leading-[1.3] text-white/95">
+              <div>MISALIGN</div>
+              <div>OVERLAP</div>
+              <div>REARRANGE</div>
+              <div>QUESTION</div>
+              <div>REPEAT</div>
+            </div>
+
+            <div class="writing-vertical-up font-mono-brutal text-[10px] font-bold tracking-widest uppercase text-[#FF2E17]">
+              PLAY NOW
+            </div>
+
+            <!-- Overlapping Tilted Red-Orange Ticket/Tag Badge -->
+            <button onclick="openModal('cyber-game')" title="Launch Cyber Punked Mini-Game" class="brutal-btn absolute -top-5 right-6 sm:right-10 z-30 bg-[#FF2E17] border-[2.5px] border-black rounded-md px-2.5 py-1.5 rotate-[14deg] shadow-[4px_4px_0px_#000] flex items-center gap-1.5">
+              <span class="font-mono-brutal text-[10px] font-black text-black uppercase">PLAY ➔</span>
+            </button>
+          </div>
+
+          <!-- Split Card: CYBER PUNKED (Left Red-Orange / Right White + Venn Diagram) -->
+          <div class="poster-module messy-tilt-1 grid grid-cols-12 brutal-border-thick bg-white overflow-hidden">
+            <!-- Left Half: Red-Orange -->
+            <div onclick="openModal('cyber-game')" class="brutal-btn col-span-6 bg-[#FF2E17] border-r-4 border-black p-3.5 sm:p-4 flex flex-col justify-between min-h-[165px]">
+              <div class="font-black text-xl sm:text-2xl leading-[0.98] uppercase text-black">
+                CYBER<br />PUNKED
+              </div>
+              <div class="mt-4 flex items-center justify-between">
+                <span class="font-black text-sm sm:text-base uppercase tracking-tight text-black underline decoration-2">
+                  PLAY NOW
+                </span>
+                <span class="font-black text-lg">▶</span>
+              </div>
+            </div>
+
+            <!-- Right Half: White + Overlapping Black/White Venn Circles -->
+            <div onclick="openModal('cyber-game')" class="col-span-6 bg-white p-3.5 sm:p-4 flex flex-col justify-between cursor-pointer hover:bg-neutral-50 transition-colors">
+              <!-- Venn Diagram SVG -->
+              <div class="flex items-center justify-center py-1">
+                <svg viewBox="0 0 120 68" class="w-24 sm:w-28 h-auto">
+                  <circle cx="42" cy="34" r="28" fill="#050505" />
+                  <circle cx="76" cy="34" r="28" fill="#FFFFFF" stroke="#050505" stroke-width="2.5" />
+                  <!-- Overlap crescent effect -->
+                  <path d="M59 11.5 A28 28 0 0 1 59 56.5 A28 28 0 0 1 59 11.5 Z" fill="#FFFFFF" stroke="#050505" stroke-width="2" />
+                </svg>
+              </div>
+
+              <div>
+                <div class="font-black text-lg sm:text-xl leading-[0.98] uppercase text-black">
+                  CYBER<br />PUNKED
+                </div>
+                <p class="mt-2 font-extrabold text-[9px] sm:text-[10px] leading-[1.2] uppercase text-black">
+                  SYSTEMS FOR A MORE CHAOTIC TOMORROW.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTTOM-CENTER & RIGHT SECTION (Cols 6-12) -->
+        <div class="lg:col-span-7 grid grid-cols-12 gap-3 sm:gap-4 items-stretch">
+
+          <!-- Vertical Rotated Typography: FORM FOLLOWS FANTASY -->
+          <div class="col-span-12 sm:col-span-5 flex flex-row sm:flex-col justify-between border-2 border-black sm:border-0 p-3 sm:p-0 bg-white">
+            <!-- Micro-copy top -->
+            <div class="font-extrabold text-[10px] sm:text-[11px] uppercase leading-[1.25] text-black">
+              <div>TYPE</div>
+              <div>SHAPE</div>
+              <div>COLOR</div>
+              <div>LAYOUT</div>
+              <div>REPEAT</div>
+            </div>
+
+            <!-- Vertical Rotated Bold Display Typography -->
+            <div class="flex-1 flex items-center justify-center py-2">
+              <div class="sm:writing-vertical-up font-display uppercase text-black text-2xl sm:text-[26px] md:text-[30px] leading-[0.95] tracking-tight select-none">
+                FORM<br />FOLLOWS<br />FANTASY
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Brutalist Architecture Composition + MMXXI·VII Pill + BE BOLD Box -->
+          <div class="col-span-12 sm:col-span-7 relative flex flex-col justify-end min-h-[260px] sm:min-h-[290px]">
+
+            <!-- Blue Pill Badge: MMXXI·VII -->
+            <div class="z-20 self-start sm:ml-2 mb-[-14px] bg-[#0044FF] text-white border-[2.5px] border-black rounded-lg px-3 py-1 font-mono-brutal font-bold text-xs sm:text-sm tracking-wider shadow-[3px_3px_0px_#000]">
+              MMXXI·VII
+            </div>
+
+            <!-- Main Brutalist Concrete Architecture Panel -->
+            <div class="relative w-full h-full brutal-border-thick halftone-concrete overflow-hidden flex items-end justify-between">
+              <!-- Crisp SVG Brutalist Concrete Architecture Shadow & Cantilever Illustration -->
+              <svg viewBox="0 0 360 260" preserveAspectRatio="xMidYMid slice" class="absolute inset-0 w-full h-full">
+                <defs>
+                  <pattern id="concreteGrain" width="6" height="6" patternUnits="userSpaceOnUse">
+                    <rect width="6" height="6" fill="#CFCFCF" />
+                    <circle cx="1.5" cy="1.5" r="1" fill="#1A1A1A" opacity="0.35" />
+                    <circle cx="4.5" cy="4.5" r="0.9" fill="#000000" opacity="0.28" />
+                  </pattern>
+                  <pattern id="ribbedWall" width="8" height="260" patternUnits="userSpaceOnUse">
+                    <rect width="4" height="260" fill="#B8B8B8" />
+                    <rect x="4" width="4" height="260" fill="#525252" />
+                  </pattern>
+                </defs>
+
+                <!-- Sky / Background Concrete -->
+                <rect width="360" height="260" fill="url(#concreteGrain)" />
+
+                <!-- Right Ribbed Concrete Tower -->
+                <rect x="215" y="75" width="145" height="185" fill="url(#ribbedWall)" stroke="#000" stroke-width="2" />
+
+                <!-- Main Brutalist Facade Block -->
+                <polygon points="15,20 235,95 235,260 15,260" fill="#D6D6D6" stroke="#000" stroke-width="2.5" />
+
+                <!-- Deep Diagonal Brutalist Shadow -->
+                <polygon points="120,88 235,125 235,235 120,165" fill="#1F1F1F" opacity="0.88" />
+
+                <!-- Cantilever Concrete Beam -->
+                <polygon points="115,82 185,55 215,65 145,95" fill="#EBEBEB" stroke="#000" stroke-width="2" />
+                <polygon points="145,95 215,65 215,102 145,132" fill="#7A7A7A" stroke="#000" stroke-width="2" />
+                <polygon points="115,82 145,95 145,132 115,118" fill="#2B2B2B" stroke="#000" stroke-width="2" />
+
+                <!-- Lower Balcony Overhang -->
+                <polygon points="15,180 195,235 195,260 15,260" fill="#141414" />
+                <polygon points="15,172 205,228 195,238 15,184" fill="#E0E0E0" stroke="#000" stroke-width="2" />
+              </svg>
+
+              <!-- Blue Accent Square on Top-Right Corner -->
+              <div class="absolute top-0 right-0 w-16 h-16 bg-[#0044FF] border-l-4 border-b-4 border-black z-10"></div>
+
+              <!-- Black Box Overlay on Right: BE BOLD / STAY CRUDE / KEEP EXPLORING -->
+              <div class="relative z-20 ml-auto mb-6 bg-black text-white border-l-4 border-t-4 border-b-4 border-black p-3.5 sm:p-4 font-extrabold text-[10px] sm:text-xs uppercase leading-[1.35] tracking-tight">
+                <div>BE BOLD</div>
+                <div>STAY CRUDE</div>
+                <div>KEEP EXPLORING</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. INTERACTIVE PORTFOLIO PROJECTS & ENGINE FOOTER STRIP -->
+      <footer class="mt-6 pt-4 border-t-4 border-black flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="openModal('king-game')" class="brutal-btn bg-[#0044FF] text-white border-2 border-black px-3 py-1.5 font-mono-brutal text-xs font-bold uppercase">
+            [01] PLAYABLE KING 2D
+          </button>
+          <button onclick="openModal('cyber-game')" class="brutal-btn bg-[#FF2E17] text-black border-2 border-black px-3 py-1.5 font-mono-brutal text-xs font-bold uppercase">
+            [02] CYBER PUNKED
+          </button>
+          <button onclick="openModal('design-system')" class="brutal-btn bg-white text-black border-2 border-black px-3 py-1.5 font-mono-brutal text-xs font-bold uppercase">
+            [03] GAME MECHANICS
+          </button>
+          <button onclick="openModal('dev-logs')" class="brutal-btn bg-black text-white border-2 border-black px-3 py-1.5 font-mono-brutal text-xs font-bold uppercase">
+            [04] CONTACT / HIRE DEV
+          </button>
+        </div>
+
+        <div class="font-mono-brutal text-[11px] font-bold uppercase text-black">
+          © MMXXVI HALIRAHSA // ALL PIXELS HAND-CRAFTED
+        </div>
+      </footer>
+    </div>
+  </main>
+
+  <!-- TOAST NOTIFICATION BANNER -->
+  <div id="brutal-toast" class="fixed bottom-5 right-5 z-50 hidden bg-black text-white border-[3px] border-[#FF2E17] px-4 py-2.5 font-mono-brutal text-xs font-bold shadow-[6px_6px_0px_#000]">
+    SYSTEM READY
+  </div>
+
+  <!-- INTERACTIVE NEO-BRUTALIST MODAL OVERLAY (PLAYABLE GAMES, MECHANICS & CONTACT) -->
+  <div id="brutal-modal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-[2px] p-3 sm:p-6 flex items-center justify-center overflow-y-auto">
+    <div class="w-full max-w-2xl bg-white brutal-border-thick shadow-[12px_12px_0px_#FF2E17] overflow-hidden my-auto">
+      <!-- Modal Header -->
+      <div id="modal-header" class="bg-black text-white px-4 py-3 flex items-center justify-between border-b-4 border-black">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 bg-[#FF2E17] inline-block"></span>
+          <h2 id="modal-title" class="font-display text-base sm:text-lg uppercase tracking-tight">
+            PLAYABLE KING // ARCADE
+          </h2>
+        </div>
+        <button onclick="closeModal()" class="bg-[#FF2E17] text-black border-2 border-white px-2.5 py-0.5 font-black text-sm hover:bg-white transition-colors">
+          ✕ ESC
+        </button>
+      </div>
+
+      <!-- Modal Dynamic Body -->
+      <div id="modal-body" class="p-4 sm:p-6 bg-white">
+        <!-- Injected dynamically via JS -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * 1. HIGH-DETAIL 2D PIXEL ART PORTRAIT RENDERER (MOHAMED SALAH - LIVERPOOL KIT)
+     * Renders crisp 2D pixel art directly onto the #salah-pixel-canvas matching the mockup.
+     */
+    const salahCanvas = document.getElementById('salah-pixel-canvas');
+    const sCtx = salahCanvas.getContext('2d');
+    let kingFrame = 0;
+    let kingSparkles = [];
+
+    // Pixel color palette
+    const PAL = {
+      '.': null,         // Transparent (shows #0044FF card background)
+      'K': '#09090B',    // Deep outline / hair shadow / beard
+      'H': '#1F1612',    // Dark curly hair base
+      'C': '#36261E',    // Curly hair highlight
+      'S': '#C68658',    // Skin midtone
+      'L': '#DF9E6E',    // Skin highlight
+      'D': '#9B5F38',    // Skin shadow
+      'W': '#FFFFFF',    // Eye white / Nike swoosh
+      'R': '#C8102E',    // Liverpool Red jersey
+      'M': '#960B22',    // Jersey dark fold shadow
+      'B': '#E32636',    // Jersey highlight
+      'G': '#F6EB61',    // Gold Liverbird crest
+      'T': '#1A110E'     // Beard texture
+    };
+
+    // 48x54 Pixel Art Matrix scaled x2 to 96x108 for ultra-crisp retro pixel edges
+    const salahSprite = [
+      "................................................",
+      "................KKKKKKKKKKKK....................",
+      ".............KKKHHHHHHHHHHHHKKK.................",
+      "...........KKHHCHHHHHHHHHHCHHHHKK...............",
+      "..........KHHCHHHCHHHHHHCHHHHCHHHK..............",
+      ".........KHHHHHHHHHHHHHHHHHHHHHHHHK.............",
+      "........KHHCHHHHHCHHHHHHHCHHHHHCHHHK............",
+      "........KHHHHHHHHHHHHHHHHHHHHHHHHHHK............",
+      ".......KHHCHHHHHHHHHHHHHHHHHHHHHCHHHK...........",
+      ".......KHHHHHHKKKKKKKKKKKKKKKKHHHHHHK...........",
+      ".......KHHHHKKLLLLLLLLLLLLLLLLKKHHHHK...........",
+      ".......KHHHKKLLLLLLLLLLLLLLLLLLKKHHHK...........",
+      ".......KHHKKLLLLLLLLLLLLLLLLLLLLKKHHK...........",
+      "........KKKLLLLLLLLLLLLLLLLLLLLLLKKK............",
+      "........KKLLLLKKKKKKKKKKKKKKLLLLLLKK............",
+      "........KKLLLKKKSSSSSSSSSSKKKLLLLLKK............",
+      "........KKLLKLLWWWWKKKKWWWWLLKLLLLKK............",
+      "........KKLLKLLWKKWLLLLWKKWLLKLLLLKK............",
+      ".......KKKLLLLLLLLLLDDLLLLLLLLLLLLKKK...........",
+      "......KSSKLLLLLLLLLLDDLLLLLLLLLLLLKSSK..........",
+      "......KSDKLLLLLLLLLDDDDLLLLLLLLLLLKDSK..........",
+      "......KSDKLLLLLLLLDDDDDDLLLLLLLLLLKDSK..........",
+      ".......KKKLLLLLLLLLLLLLLLLLLLLLLLLKKK...........",
+      "........KKLLLLLLKKKKKKKKKKKKLLLLLLKK............",
+      "........KKKLLLKKKTTTTTTTTTTKKKLLLKKK............",
+      "........KKKKLKKTTTTLLLLLLTTTTKKLKKKK............",
+      "........KKKKKKTTTTKKKKKKKKTTTTKKKKKK............",
+      "........KKKKKKTTTTSSSSSSSSCTTTKKKKKK............",
+      ".........KKKKKTTTTTSSSSSSTTTTTKKKKK.............",
+      ".........KKKKKKTTTTTTTTTTTTTTKKKKKK.............",
+      "..........KKKKKKTTTTTTTTTTTTKKKKKK..............",
+      "...........KKKKKKKTTTTTTTTKKKKKKK...............",
+      "............KKKKKKKKKKKKKKKKKKKK................",
+      "..............KKKKKDDDDDDKKKKK..................",
+      "..............KKKKDDDDDDDDKKKK..................",
+      "............KKRRRRDDDDDDDDKKKKKK................",
+      ".........KKKRRRRRRRDDDDDDKRRRRRRKKK.............",
+      ".......KKRRRRRRRRRRRKKKKKRRRRRRRRRRKK...........",
+      ".....KKRRRRBRRRRRRRRRRRRRRRRRRRBRRRRRKK.........",
+      "....KRRRRRRBRRRRRRRRRRRRRRRRRRRBRRRRRRRK........",
+      "...KRRRRRRRBRRRRRRRRRRRRRRRRRRRBRRRRRRRRK.......",
+      "..KRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRK......",
+      "..KRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRK......",
+      ".KRRRRRRRRRWWWRRRRRRRRRRRRRRRRGGGRRRRRRRRRK.....",
+      ".KRRRRRRRRWWWRRRRRRRRRRRRRRRRRGGGGRRRRRRRRK.....",
+      ".KRRRRRRRRRRRRRRRRRRRRRRRRRRRRGGGRRRRRRRRRK.....",
+      "KRRRRRMRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRMRRRRRK....",
+      "KRRRRRMRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRMRRRRRK....",
+      "KRRRRRMRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRMRRRRRK....",
+      "KRRRRRMRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRMRRRRRK....",
+      "KRRRRRMRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRMRRRRRK....",
+      "KRRRRRMRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRMRRRRRK....",
+      "KRRRRRMRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRMRRRRRK....",
+      "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK...."
+    ];
+
+    function drawSalahPixelPortrait() {
+      sCtx.clearRect(0, 0, salahCanvas.width, salahCanvas.height);
+      const bobOffset = Math.sin(kingFrame * 0.08) > 0.3 ? 1 : 0;
+
+      for (let y = 0; y < salahSprite.length; y++) {
+        const row = salahSprite[y];
+        for (let x = 0; x < row.length; x++) {
+          const code = row[x];
+          const color = PAL[code];
+          if (color) {
+            sCtx.fillStyle = color;
+            sCtx.fillRect(x * 2, (y + bobOffset) * 2, 2, 2);
+          }
+        }
+      }
+
+      // Render celebratory golden pixels when triggered
+      for (let i = kingSparkles.length - 1; i >= 0; i--) {
+        const sp = kingSparkles[i];
+        sCtx.fillStyle = sp.color;
+        sCtx.fillRect(sp.x, sp.y, 4, 4);
+        sp.y -= sp.vy;
+        sp.life--;
+        if (sp.life <= 0) kingSparkles.splice(i, 1);
+      }
+
+      kingFrame++;
+      requestAnimationFrame(drawSalahPixelPortrait);
+    }
+
+    function sparkleKing() {
+      const colors = ['#FFD600', '#FFFFFF', '#FF2E17'];
+      for (let i = 0; i < 18; i++) {
+        kingSparkles.push({
+          x: 12 + Math.random() * 72,
+          y: 20 + Math.random() * 75,
+          vy: 0.6 + Math.random() * 1.2,
+          life: 35 + Math.floor(Math.random() * 25),
+          color: colors[i % colors.length]
+        });
+      }
+      triggerToast('EGYPTIAN KING // +99 FINISHING STAT BOOST');
+    }
+
+    drawSalahPixelPortrait();
+
+    /**
+     * 2. INTERACTIVE UI STATE & MESSY MODE TOGGLE
+     */
+    let isMessy = false;
+
+    function toggleMessyMode() {
+      isMessy = !isMessy;
+      document.body.classList.toggle('messy-mode', isMessy);
+      const statusEl = document.getElementById('chaos-status');
+      if (statusEl) statusEl.textContent = isMessy ? 'ON' : 'OFF';
+      triggerToast(isMessy ? 'GRID DISOBEDIENCE: ENABLED' : 'SWISS GRID: RESTORED');
+    }
+
+    function resetPosterState() {
+      isMessy = false;
+      document.body.classList.remove('messy-mode');
+      const statusEl = document.getElementById('chaos-status');
+      if (statusEl) statusEl.textContent = 'OFF';
+      closeModal();
+      triggerToast('SYSTEM RESET // ALL MODULES ALIGNED');
+    }
+
+    let toastTimeout;
+    function triggerToast(message) {
+      const toast = document.getElementById('brutal-toast');
+      toast.textContent = message;
+      toast.classList.remove('hidden');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 2600);
+    }
+
+    /**
+     * 3. MODAL SYSTEM & PLAYABLE HTML5 CANVAS MINI-GAMES
+     */
+    let activeGameLoop = null;
+
+    function stopActiveGame() {
+      if (activeGameLoop) {
+        cancelAnimationFrame(activeGameLoop);
+        activeGameLoop = null;
+      }
+    }
+
+    function closeModal() {
+      stopActiveGame();
+      document.getElementById('brutal-modal').classList.add('hidden');
+    }
+
+    function openModal(section) {
+      stopActiveGame();
+      const modal = document.getElementById('brutal-modal');
+      const titleEl = document.getElementById('modal-title');
+      const bodyEl = document.getElementById('modal-body');
+
+      modal.classList.remove('hidden');
+
+      if (section === 'king-game') {
+        titleEl.textContent = 'PLAYABLE KING // 2D PENALTY STRIKE';
+        bodyEl.innerHTML = `
+          <div class="flex flex-col gap-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 bg-[#0044FF] text-white border-2 border-black px-3 py-2 font-mono-brutal text-xs font-bold">
+              <span>PLAYER: MO SALAH (#11)</span>
+              <span>GOALS: <span id="king-score" class="bg-black text-[#FFD600] px-2 py-0.5">0</span></span>
+              <span>STREAK: <span id="king-streak">0</span></span>
+            </div>
+            <div class="relative border-4 border-black bg-[#107C41] overflow-hidden">
+              <canvas id="king-arcade-canvas" width="560" height="300" class="w-full h-auto block cursor-crosshair"></canvas>
+            </div>
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-mono-brutal">
+              <span class="font-bold">KLIK / TAP GAWANG UNTUK MENEMBAK BOLA!</span>
+              <button onclick="startKingStrikeGame()" class="brutal-btn bg-[#FF2E17] text-black border-2 border-black px-3 py-1 font-bold uppercase">
+                RESET MATCH
+              </button>
+            </div>
+          </div>
+        `;
+        startKingStrikeGame();
+      } else if (section === 'cyber-game') {
+        titleEl.textContent = 'CYBER PUNKED // BRUTALIST RUNNER';
+        bodyEl.innerHTML = `
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center justify-between bg-[#FF2E17] text-black border-2 border-black px-3 py-2 font-mono-brutal text-xs font-bold">
+              <span>ENGINE: CUSTOM 2D PHYSICS</span>
+              <span>SCORE: <span id="cyber-score" class="bg-black text-white px-2 py-0.5">0</span></span>
+            </div>
+            <div class="relative border-4 border-black bg-white overflow-hidden">
+              <canvas id="cyber-arcade-canvas" width="560" height="260" class="w-full h-auto block cursor-pointer"></canvas>
+            </div>
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-mono-brutal">
+              <span class="font-bold">TEKAN [SPACE] ATAU KLIK / TAP LAYAR UNTUK MELOMPAT!</span>
+              <button onclick="startCyberPunkedGame()" class="brutal-btn bg-black text-white border-2 border-black px-3 py-1 font-bold uppercase">
+                RESTART RUN
+              </button>
+            </div>
+          </div>
+        `;
+        startCyberPunkedGame();
+      } else if (section === 'design-system') {
+        titleEl.textContent = 'DESIGN SYSTEM // GAMEPLAY MECHANICS';
+        bodyEl.innerHTML = `
+          <div class="space-y-4">
+            <div class="bg-[#FF2E17] border-2 border-black p-4">
+              <div class="font-display text-xl uppercase text-black">CORE ARCHITECTURE PHILOSOPHY</div>
+              <p class="mt-1 text-xs sm:text-sm font-bold text-black">
+                Membangun mekanik game yang responsif dalam hitungan milidetik: input buffering, coyote time, hit-stop frames, dan feedback visual kontras tinggi.
+              </p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono-brutal text-xs">
+              <div class="border-2 border-black p-3 bg-white">
+                <div class="font-black text-sm uppercase mb-1 text-[#0044FF]">01. COMBAT & JUICE</div>
+                <p>Screen-shake terukur, shader impact flash, dan frame-data presisi 60FPS.</p>
+              </div>
+              <div class="border-2 border-black p-3 bg-white">
+                <div class="font-black text-sm uppercase mb-1 text-[#FF2E17]">02. MODULAR AI</div>
+                <p>State-machine & utility AI untuk perilaku musuh yang adaptif dan menantang.</p>
+              </div>
+              <div class="border-2 border-black p-3 bg-white">
+                <div class="font-black text-sm uppercase mb-1">03. TECH STACK</div>
+                <p>Godot 4 (GDScript/C#), Unity, C++, WebGL / HTML5 Canvas Custom Engines.</p>
+              </div>
+              <div class="border-2 border-black p-3 bg-white">
+                <div class="font-black text-sm uppercase mb-1">04. PROTOTYPING</div>
+                <p>Iterasi cepat dari sketsa kasar menjadi playable build dalam 48 jam.</p>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (section === 'dev-logs') {
+        titleEl.textContent = 'HALIRAHSA // DEV LOGS & COLLABORATION';
+        bodyEl.innerHTML = `
+          <div class="space-y-4 font-mono-brutal text-xs">
+            <div class="border-2 border-black p-3 bg-[#F4F4F4]">
+              <div class="font-bold text-[#0044FF]">STATUS: AVAILABLE FOR GAME DEV & CREATIVE TECH</div>
+              <p class="mt-1 text-black font-sans font-semibold text-sm">
+                Tertarik berkolaborasi membangun game indie, pengalaman web interaktif, atau prototipe mekanik unik? Kirim transmisi langsung di bawah ini.
+              </p>
+            </div>
+            <form onsubmit="handleContactSubmit(event)" class="space-y-3">
+              <div>
+                <label class="block font-bold uppercase mb-1">NAMA / STUDIO</label>
+                <input type="text" required placeholder="Contoh: Studio Merah Putih" class="w-full border-2 border-black p-2 font-sans text-sm focus:outline-none focus:bg-[#FFF9DB]" />
+              </div>
+              <div>
+                <label class="block font-bold uppercase mb-1">BRIEF PROYEK / PESAN</label>
+                <textarea rows="3" required placeholder="Ceritakan konsep game atau kolaborasi yang ingin dibuat..." class="w-full border-2 border-black p-2 font-sans text-sm focus:outline-none focus:bg-[#FFF9DB]"></textarea>
+              </div>
+              <button type="submit" class="brutal-btn w-full bg-[#0044FF] text-white border-2 border-black py-2.5 font-display uppercase tracking-wider text-sm">
+                KIRIM TRANSMISI ➔
+              </button>
+            </form>
+          </div>
+        `;
+      }
+    }
+
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      closeModal();
+      triggerToast('TRANSMISI TERKIRIM KE HALIRAHSA // TERIMA KASIH!');
+    }
+
+    /**
+     * MINI-GAME 1: PLAYABLE KING 2D PENALTY STRIKE
+     */
+    function startKingStrikeGame() {
+      stopActiveGame();
+      const canvas = document.getElementById('king-arcade-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      let score = 0;
+      let streak = 0;
+      let keeperX = 280;
+      let keeperDir = 3.6;
+      let ball = { x: 280, y: 255, vx: 0, vy: 0, moving: false, r: 10 };
+      let bannerText = '';
+      let bannerTimer = 0;
+
+      const scoreEl = document.getElementById('king-score');
+      const streakEl = document.getElementById('king-streak');
+
+      function resetBall() {
+        ball.x = 280;
+        ball.y = 255;
+        ball.vx = 0;
+        ball.vy = 0;
+        ball.moving = false;
+      }
+
+      function shootAt(targetX, targetY) {
+        if (ball.moving) return;
+        const clampedX = Math.max(125, Math.min(435, targetX));
+        const clampedY = Math.max(48, Math.min(135, targetY));
+        const dx = clampedX - ball.x;
+        const dy = clampedY - ball.y;
+        const dist = Math.hypot(dx, dy) || 1;
+        const speed = 11.5;
+        ball.vx = (dx / dist) * speed;
+        ball.vy = (dy / dist) * speed;
+        ball.moving = true;
+      }
+
+      canvas.onclick = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        shootAt((e.clientX - rect.left) * scaleX, (e.clientY - rect.top) * scaleY);
+      };
+
+      function update() {
+        // Move goalkeeper
+        keeperX += keeperDir;
+        if (keeperX > 410 || keeperX < 150) {
+          keeperDir *= -1;
+        }
+
+        if (ball.moving) {
+          ball.x += ball.vx;
+          ball.y += ball.vy;
+
+          // Check goal line
+          if (ball.y <= 115) {
+            const saved = Math.abs(ball.x - keeperX) < 34;
+            if (saved) {
+              streak = 0;
+              bannerText = 'SAVED BY KEEPER!';
+              bannerTimer = 55;
+            } else {
+              score++;
+              streak++;
+              keeperDir = (keeperDir > 0 ? 1 : -1) * Math.min(7.5, 3.6 + score * 0.35);
+              bannerText = 'GOOOAL!! THE KING SCORES!';
+              bannerTimer = 55;
+            }
+            if (scoreEl) scoreEl.textContent = score;
+            if (streakEl) streakEl.textContent = streak;
+            resetBall();
+          }
+        }
+
+        if (bannerTimer > 0) bannerTimer--;
+      }
+
+      function draw() {
+        // Pitch stripes
+        ctx.fillStyle = '#15803D';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#166534';
+        for (let i = 0; i < canvas.height; i += 40) {
+          ctx.fillRect(0, i, canvas.width, 20);
+        }
+
+        // Penalty box lines
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(90, 30, 380, 145);
+
+        // Goal Frame
+        ctx.fillStyle = 'rgba(255,255,255,0.2)';
+        ctx.fillRect(120, 35, 320, 85);
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 5;
+        ctx.strokeRect(120, 35, 320, 85);
+
+        // Goalkeeper (Brutalist Blue Block)
+        ctx.fillStyle = '#0044FF';
+        ctx.fillRect(keeperX - 24, 82, 48, 34);
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(keeperX - 24, 82, 48, 34);
+
+        // Mini Pixel King Sprite at Bottom
+        ctx.fillStyle = '#FF2E17';
+        ctx.fillRect(245, 248, 22, 28);
+        ctx.strokeRect(245, 248, 22, 28);
+        ctx.fillStyle = '#1F1612';
+        ctx.fillRect(247, 234, 18, 14);
+
+        // Football
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#000000';
+        ctx.stroke();
+
+        // Goal / Save Popup Banner
+        if (bannerTimer > 0) {
+          ctx.fillStyle = bannerText.includes('GOOOAL') ? '#FFD600' : '#FF2E17';
+          ctx.fillRect(130, 145, 300, 42);
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 4;
+          ctx.strokeRect(130, 145, 300, 42);
+          ctx.fillStyle = '#000000';
+          ctx.font = '900 16px "Archivo Black", sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(bannerText, 280, 172);
+        }
+      }
+
+      function loop() {
+        update();
+        draw();
+        activeGameLoop = requestAnimationFrame(loop);
+      }
+      loop();
+    }
+
+    /**
+     * MINI-GAME 2: CYBER PUNKED NEO-BRUTALIST RUNNER
+     */
+    function startCyberPunkedGame() {
+      stopActiveGame();
+      const canvas = document.getElementById('cyber-arcade-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      let player = { x: 70, y: 176, w: 30, h: 36, vy: 0, grounded: true };
+      let obstacles = [];
+      let frame = 0;
+      let score = 0;
+      let speed = 5.5;
+      let gameOver = false;
+
+      const scoreEl = document.getElementById('cyber-score');
+
+      function jump() {
+        if (gameOver) {
+          startCyberPunkedGame();
+          return;
+        }
+        if (player.grounded) {
+          player.vy = -12.5;
+          player.grounded = false;
+        }
+      }
+
+      canvas.onclick = jump;
+      const keyHandler = (e) => {
+        if (e.code === 'Space') {
+          e.preventDefault();
+          jump();
+        }
+      };
+      window.addEventListener('keydown', keyHandler, { once: false });
+
+      function loop() {
+        if (!document.getElementById('cyber-arcade-canvas')) {
+          window.removeEventListener('keydown', keyHandler);
+          return;
+        }
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Brutalist Grid Background
+        ctx.strokeStyle = '#E5E5E5';
+        ctx.lineWidth = 1.5;
+        for (let gx = -(frame * 2) % 40; gx < canvas.width; gx += 40) {
+          ctx.beginPath();
+          ctx.moveTo(gx, 0);
+          ctx.lineTo(gx, 212);
+          ctx.stroke();
+        }
+
+        // Ground Strip
+        ctx.fillStyle = '#050505';
+        ctx.fillRect(0, 212, canvas.width, 48);
+
+        if (!gameOver) {
+          frame++;
+          player.y += player.vy;
+          player.vy += 0.65;
+
+          if (player.y >= 176) {
+            player.y = 176;
+            player.vy = 0;
+            player.grounded = true;
+          }
+
+          if (frame % 75 === 0) {
+            const tall = Math.random() > 0.5;
+            obstacles.push({
+              x: canvas.width + 20,
+              y: tall ? 166 : 182,
+              w: 24,
+              h: tall ? 46 : 30
+            });
+          }
+
+          for (let i = obstacles.length - 1; i >= 0; i--) {
+            const obs = obstacles[i];
+            obs.x -= speed;
+
+            // Collision AABB
+            if (
+              player.x < obs.x + obs.w &&
+              player.x + player.w > obs.x &&
+              player.y < obs.y + obs.h &&
+              player.y + player.h > obs.y
+            ) {
+              gameOver = true;
+            }
+
+            if (obs.x + obs.w < 0) {
+              obstacles.splice(i, 1);
+              score += 10;
+              speed = Math.min(10, 5.5 + score * 0.015);
+              if (scoreEl) scoreEl.textContent = score;
+            }
+          }
+        }
+
+        // Draw Player (Electric Blue Block)
+        ctx.fillStyle = '#0044FF';
+        ctx.fillRect(player.x, player.y, player.w, player.h);
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(player.x, player.y, player.w, player.h);
+
+        // Draw Obstacles (Vermilion Red-Orange Spikes/Blocks)
+        obstacles.forEach((obs) => {
+          ctx.fillStyle = '#FF2E17';
+          ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 3;
+          ctx.strokeRect(obs.x, obs.y, obs.w, obs.h);
+        });
+
+        if (gameOver) {
+          ctx.fillStyle = '#050505';
+          ctx.fillRect(140, 82, 280, 62);
+          ctx.strokeStyle = '#FF2E17';
+          ctx.lineWidth = 4;
+          ctx.strokeRect(140, 82, 280, 62);
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = '900 18px "Archivo Black", sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('SYSTEM CRASHED!', 280, 110);
+          ctx.font = '700 11px "Space Mono", monospace';
+          ctx.fillText('KLIK / SPACE UNTUK MAIN LAGI', 280, 130);
+        }
+
+        activeGameLoop = requestAnimationFrame(loop);
+      }
+
+      loop();
+    }
+
+    // Close modal on Escape key
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+</body>
+</html>
